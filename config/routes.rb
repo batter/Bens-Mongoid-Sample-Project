@@ -1,6 +1,13 @@
 MSampleApp::Application.routes.draw do
-  resources :users
+  # Setup the routes for the pages controller
+  get "pages/home"
+  get "pages/about"
+  match 'about' => 'pages#about'
 
+  resources :users # Routes for the users controller
+  
+  root :to => "pages#home" # Setting up the root route
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

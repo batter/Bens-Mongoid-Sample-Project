@@ -19,6 +19,7 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe UsersController do
+  render_views
 
   # This should return the minimal set of attributes required to create a valid
   # User. As you add validations to User, be sure to
@@ -33,6 +34,12 @@ describe UsersController do
       get :index
       assigns(:users).should eq([user])
     end
+    
+    it "should have the right title" do
+      get :index
+      response.should have_selector("title",
+                        :content => "Ben's Sample App | User List")
+    end
   end
 
   describe "GET show" do
@@ -41,12 +48,25 @@ describe UsersController do
       get :show, :id => user.id.to_s
       assigns(:user).should eq(user)
     end
+    
+    it "should have the right title" do
+      user = User.create! valid_attributes
+      get :show, :id => user.id.to_s
+      response.should have_selector("title",
+                        :content => "Ben's Sample App | Ben")
+    end
   end
 
   describe "GET new" do
     it "assigns a new user as @user" do
       get :new
       assigns(:user).should be_a_new(User)
+    end
+    
+    it "should have the right title" do
+      get :new
+      response.should have_selector("title",
+                        :content => "Ben's Sample App | New User")
     end
   end
 
@@ -55,6 +75,13 @@ describe UsersController do
       user = User.create! valid_attributes
       get :edit, :id => user.id.to_s
       assigns(:user).should eq(user)
+    end
+    
+    it "should have the right title" do
+      user = User.create! valid_attributes
+      get :edit, :id => user.id.to_s
+      response.should have_selector("title",
+                        :content => "Ben's Sample App | Edit Ben")
     end
   end
 
