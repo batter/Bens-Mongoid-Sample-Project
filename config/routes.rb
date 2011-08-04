@@ -1,8 +1,7 @@
 MSampleApp::Application.routes.draw do
   # Setup the routes for the pages controller
-  get "pages/home"
-  get "pages/about"
   match 'about' => 'pages#about'
+  match 'help' => 'pages#help'
 
   resources :users # Routes for the users controller
   

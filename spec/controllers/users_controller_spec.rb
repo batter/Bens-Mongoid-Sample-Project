@@ -27,6 +27,10 @@ describe UsersController do
   def valid_attributes
     {:name => "Ben", :email => "ben@testbridge.com"}
   end
+  
+  before (:each) do
+    @base_title = "Ben's Sample App"
+  end
 
   describe "GET index" do
     it "assigns all users as @users" do
@@ -38,7 +42,7 @@ describe UsersController do
     it "should have the right title" do
       get :index
       response.should have_selector("title",
-                        :content => "Ben's Sample App | User List")
+                        :content => @base_title + " | User List")
     end
   end
 
@@ -53,7 +57,7 @@ describe UsersController do
       user = User.create! valid_attributes
       get :show, :id => user.id.to_s
       response.should have_selector("title",
-                        :content => "Ben's Sample App | Ben")
+                        :content => @base_title + " | Ben")
     end
   end
 
@@ -66,7 +70,7 @@ describe UsersController do
     it "should have the right title" do
       get :new
       response.should have_selector("title",
-                        :content => "Ben's Sample App | New User")
+                        :content => @base_title + " | New User")
     end
   end
 
@@ -81,7 +85,7 @@ describe UsersController do
       user = User.create! valid_attributes
       get :edit, :id => user.id.to_s
       response.should have_selector("title",
-                        :content => "Ben's Sample App | Edit Ben")
+                        :content => @base_title + " | Edit Ben")
     end
   end
 
