@@ -70,13 +70,16 @@ nav ul li a {
   font-weight: bold;
 }
 
-nav ul li a:visited {
+/*
+ * Navigation styling?  We will leave it out for now.
+ * 
+ nav ul li a:visited {
   color: #09c;
 }
 
 nav ul li a:hover {
   text-decoration: underline;
-}
+}*/
 
 /* Footer */
 footer {

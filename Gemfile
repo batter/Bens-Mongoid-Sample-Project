@@ -6,6 +6,8 @@ gem 'mongoid', '~> 2.1'
 gem 'bson_ext', '~> 1.3'
 gem 'SystemTimer', '~> 1.2'
 
+gem 'devise', '1.4.2' # use devise for authentication
+
 group :development do
   gem 'rspec-rails', '2.6.1'
   gem 'mongoid-rspec', '1.4.4'
@@ -15,6 +17,7 @@ group :test do
   gem 'rspec-rails', '2.6.1'
   gem 'mongoid-rspec', '1.4.4'
   gem 'webrat', '0.7.1'
+  gem 'factory_girl_rails', '1.1.0'
   # add Autotest for easier running
   gem 'autotest', '4.4.6'
   gem 'autotest-rails-pure', '4.1.2'

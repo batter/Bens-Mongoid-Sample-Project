@@ -25,6 +25,9 @@ RSpec.configure do |config|
   # instead of true.
   #config.use_transactional_fixtures = true
   
+  # Automatically include the devise spec helpers
+  config.include Devise::TestHelpers, :type => :controller
+  
   # Use Mongoid
   config.before :each do
     Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)

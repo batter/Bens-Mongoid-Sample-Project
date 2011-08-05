@@ -1,4 +1,5 @@
 <h1>Welcome to Ben's Sample App</h1>
 <p>Welcome to the home page for Ben's Sample app.  This page will be improved as development progresses.</p>
-
-<%= link_to "Sign up now!", '#', :class => "signup_button round" %>
+<% unless user_signed_in? %>
+  <%= link_to "Sign up now!", new_user_registration_path, :class => "signup_button round" %>
+<% end %>

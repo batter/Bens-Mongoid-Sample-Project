@@ -5,7 +5,18 @@
     <ul>
       <li><%= link_to "Home", :root %></li>
       <li><%= link_to "Help", :help %></li>
-      <li><%= link_to "Sign in", '#' %></li>
+      <% unless user_signed_in? %>
+      	<li><%= link_to "Sign in", new_user_session_path %></li>
+      <% else %>
+        <li><%= link_to "Edit account", edit_user_registration_path %></li>
+      	<li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
+      <% end %>
     </ul>
   </nav>
+  <% unless notice.nil? %>
+  	<p class="notice"><%= notice %></p>
+  <% end %>
+  <% unless alert.nil? %>
+  	<p class="alert"><%= alert %></p>
+  <% end %>
 </header>

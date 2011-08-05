@@ -25,18 +25,19 @@ describe UsersController do
   # User. As you add validations to User, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {:name => "Ben", :email => "ben@testbridge.com"}
+    {:name => "Ben Fresh", :email => "ben.fresh@gmail.com", :password => "foobar", :password_confirmation => "foobar"}
   end
   
   before (:each) do
     @base_title = "Ben's Sample App"
+    @user = Factory(:user)
+    sign_in @user
   end
 
   describe "GET index" do
     it "assigns all users as @users" do
-      user = User.create! valid_attributes
       get :index
-      assigns(:users).should eq([user])
+      assigns(:users).should eq([@user])
     end
     
     it "should have the right title" do
@@ -47,17 +48,19 @@ describe UsersController do
   end
 
   describe "GET show" do
+    before(:each) do
+      sign_out @user
+    end
+    
     it "assigns the requested user as @user" do
-      user = User.create! valid_attributes
-      get :show, :id => user.id.to_s
-      assigns(:user).should eq(user)
+      get :show, :id => @user.id.to_s
+      assigns(:user).should eq(@user)
     end
     
     it "should have the right title" do
-      user = User.create! valid_attributes
-      get :show, :id => user.id.to_s
+      get :show, :id => @user.id.to_s
       response.should have_selector("title",
-                        :content => @base_title + " | Ben")
+                        :content => @base_title + " | #{@user.name}")
     end
   end
 
@@ -74,57 +77,56 @@ describe UsersController do
     end
   end
 
-  describe "GET edit" do
+  describe "GET edit" do    
     it "assigns the requested user as @user" do
-      user = User.create! valid_attributes
-      get :edit, :id => user.id.to_s
-      assigns(:user).should eq(user)
+      get :edit, :id => @user.id.to_s
+      assigns(:user).should eq(@user)
     end
     
     it "should have the right title" do
-      user = User.create! valid_attributes
-      get :edit, :id => user.id.to_s
+      get :edit, :id => @user.id.to_s
       response.should have_selector("title",
-                        :content => @base_title + " | Edit Ben")
+                        :content => @base_title + " | Edit #{@user.name}")
     end
   end
 
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new User" do
-        expect {
-          post :create, :user => valid_attributes
-        }.to change(User, :count).by(1)
-      end
-
-      it "assigns a newly created user as @user" do
-        post :create, :user => valid_attributes
-        assigns(:user).should be_a(User)
-        assigns(:user).should be_persisted
-      end
-
-      it "redirects to the created user" do
-        post :create, :user => valid_attributes
-        response.should redirect_to(User.last)
-      end
-    end
-
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved user as @user" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        post :create, :user => {}
-        assigns(:user).should be_a_new(User)
-      end
-
-      it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        post :create, :user => {}
-        response.should render_template("new")
-      end
-    end
-  end
+  # Removed for now because Devise will handle user creation and what not for us
+  # describe "POST create" do    
+    # describe "with valid params" do
+      # it "creates a new User" do
+        # expect {
+          # post :create, :user => valid_attributes
+        # }.to change(User, :count).by(1)
+      # end
+# 
+      # it "assigns a newly created user as @user" do
+        # post :create, :user => valid_attributes
+        # assigns(:user).should be_a(User)
+        # assigns(:user).should be_persisted
+      # end
+# 
+      # it "redirects to the created user" do
+        # post :create, :user => valid_attributes
+        # response.should redirect_to(User.last)
+      # end
+    # end
+# 
+    # describe "with invalid params" do
+      # it "assigns a newly created but unsaved user as @user" do
+        # # Trigger the behavior that occurs when invalid params are submitted
+        # User.any_instance.stub(:save).and_return(false)
+        # post :create, :user => {}
+        # assigns(:user).should be_a_new(User)
+      # end
+# 
+      # it "re-renders the 'new' template" do
+        # # Trigger the behavior that occurs when invalid params are submitted
+        # User.any_instance.stub(:save).and_return(false)
+        # post :create, :user => {}
+        # response.should render_template("new")
+      # end
+    # end
+  # end
 
   describe "PUT update" do
     describe "with valid params" do
@@ -172,15 +174,13 @@ describe UsersController do
 
   describe "DELETE destroy" do
     it "destroys the requested user" do
-      user = User.create! valid_attributes
       expect {
-        delete :destroy, :id => user.id.to_s
+        delete :destroy, :id => @user.id.to_s
       }.to change(User, :count).by(-1)
     end
 
     it "redirects to the users list" do
-      user = User.create! valid_attributes
-      delete :destroy, :id => user.id.to_s
+      delete :destroy, :id => @user.id.to_s
       response.should redirect_to(users_url)
     end
   end
