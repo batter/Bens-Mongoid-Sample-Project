@@ -1,16 +1,18 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.0.9'
+gem 'kaminari', '0.12.4' # use kaminari for pagination
+gem 'devise', '1.4.2' # use devise for authentication
+
 # use MongoDB with the mongoid gem
 gem 'mongoid', '~> 2.1'
 gem 'bson_ext', '~> 1.3'
 gem 'SystemTimer', '~> 1.2'
 
-gem 'devise', '1.4.2' # use devise for authentication
-
 group :development do
   gem 'rspec-rails', '2.6.1'
   gem 'mongoid-rspec', '1.4.4'
+  gem 'faker', '0.9.5'
 end
 
 group :test do

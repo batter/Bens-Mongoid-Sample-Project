@@ -30,26 +30,64 @@ describe UsersController do
   
   before (:each) do
     @base_title = "Ben's Sample App"
-    @user = Factory(:user)
-    sign_in @user
   end
 
   describe "GET index" do
-    it "assigns all users as @users" do
-      get :index
-      assigns(:users).should eq([@user])
+    
+    describe "for non-signed-in users" do
+      it "should deny access" do
+        get :index
+        response.should redirect_to(new_user_session_path)
+        flash[:alert].should =~ /You need to sign in or sign up before continuing./
+      end
     end
     
-    it "should have the right title" do
-      get :index
-      response.should have_selector("title",
-                        :content => @base_title + " | User List")
+    describe "for signed-in users" do
+      
+      before (:each) do
+        @user = Factory(:user)
+        sign_in @user
+        
+        @users = [@user]
+        30.times do
+          @users << Factory(:user, :email => Factory.next(:email))
+        end
+      end
+      
+      it "should be successful" do
+        get :index
+        response.should be_success
+      end
+      
+      it "should have the right title" do
+        get :index
+        response.should have_selector("title",
+                          :content => @base_title + " | User List")
+      end
+      
+      it "should have an element for each user" do
+        get :index
+        @users[0..2].each do |user|
+          response.should have_selector("td", :content => user.name)
+        end
+      end
+      
+      it "should paginate users" do
+        get :index
+        response.should have_selector("nav.pagination")
+        response.should have_selector("a", :href => "/users?page=2",
+                                           :content => "2")
+        response.should have_selector("a", :href => "/users?page=2",
+                                           :content => "Next")
+        response.should have_selector("a", :href => "/users?page=2",
+                                           :content => "Last")
+      end
     end
   end
 
   describe "GET show" do
-    before(:each) do
-      sign_out @user
+    before (:each) do
+      @user = Factory(:user)
     end
     
     it "assigns the requested user as @user" do
@@ -64,125 +102,74 @@ describe UsersController do
     end
   end
 
-  describe "GET new" do
-    it "assigns a new user as @user" do
-      get :new
-      assigns(:user).should be_a_new(User)
-    end
-    
-    it "should have the right title" do
-      get :new
-      response.should have_selector("title",
-                        :content => @base_title + " | New User")
-    end
-  end
+  # describe "GET edit" do    
+    # it "assigns the requested user as @user" do
+      # get :edit, :id => @user.id.to_s
+      # assigns(:user).should eq(@user)
+    # end
+#     
+    # it "should have the right title" do
+      # get :edit, :id => @user.id.to_s
+      # response.should have_selector("title",
+                        # :content => @base_title + " | Edit #{@user.name}")
+    # end
+  # end
 
-  describe "GET edit" do    
-    it "assigns the requested user as @user" do
-      get :edit, :id => @user.id.to_s
-      assigns(:user).should eq(@user)
-    end
-    
-    it "should have the right title" do
-      get :edit, :id => @user.id.to_s
-      response.should have_selector("title",
-                        :content => @base_title + " | Edit #{@user.name}")
-    end
-  end
-
-  # Removed for now because Devise will handle user creation and what not for us
-  # describe "POST create" do    
+  # describe "PUT update" do
     # describe "with valid params" do
-      # it "creates a new User" do
-        # expect {
-          # post :create, :user => valid_attributes
-        # }.to change(User, :count).by(1)
+      # it "updates the requested user" do
+        # user = User.create! valid_attributes
+        # # Assuming there are no other users in the database, this
+        # # specifies that the User created on the previous line
+        # # receives the :update_attributes message with whatever params are
+        # # submitted in the request.
+        # User.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
+        # put :update, :id => user.id, :user => {'these' => 'params'}
       # end
 # 
-      # it "assigns a newly created user as @user" do
-        # post :create, :user => valid_attributes
-        # assigns(:user).should be_a(User)
-        # assigns(:user).should be_persisted
+      # it "assigns the requested user as @user" do
+        # user = User.create! valid_attributes
+        # put :update, :id => user.id, :user => valid_attributes
+        # assigns(:user).should eq(user)
       # end
 # 
-      # it "redirects to the created user" do
-        # post :create, :user => valid_attributes
-        # response.should redirect_to(User.last)
+      # it "redirects to the user" do
+        # user = User.create! valid_attributes
+        # put :update, :id => user.id, :user => valid_attributes
+        # response.should redirect_to(user)
       # end
     # end
 # 
     # describe "with invalid params" do
-      # it "assigns a newly created but unsaved user as @user" do
+      # it "assigns the user as @user" do
+        # user = User.create! valid_attributes
         # # Trigger the behavior that occurs when invalid params are submitted
         # User.any_instance.stub(:save).and_return(false)
-        # post :create, :user => {}
-        # assigns(:user).should be_a_new(User)
+        # put :update, :id => user.id.to_s, :user => {}
+        # assigns(:user).should eq(user)
       # end
 # 
-      # it "re-renders the 'new' template" do
+      # it "re-renders the 'edit' template" do
+        # user = User.create! valid_attributes
         # # Trigger the behavior that occurs when invalid params are submitted
         # User.any_instance.stub(:save).and_return(false)
-        # post :create, :user => {}
-        # response.should render_template("new")
+        # put :update, :id => user.id.to_s, :user => {}
+        # response.should render_template("edit")
       # end
     # end
   # end
-
-  describe "PUT update" do
-    describe "with valid params" do
-      it "updates the requested user" do
-        user = User.create! valid_attributes
-        # Assuming there are no other users in the database, this
-        # specifies that the User created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        User.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => user.id, :user => {'these' => 'params'}
-      end
-
-      it "assigns the requested user as @user" do
-        user = User.create! valid_attributes
-        put :update, :id => user.id, :user => valid_attributes
-        assigns(:user).should eq(user)
-      end
-
-      it "redirects to the user" do
-        user = User.create! valid_attributes
-        put :update, :id => user.id, :user => valid_attributes
-        response.should redirect_to(user)
-      end
-    end
-
-    describe "with invalid params" do
-      it "assigns the user as @user" do
-        user = User.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        put :update, :id => user.id.to_s, :user => {}
-        assigns(:user).should eq(user)
-      end
-
-      it "re-renders the 'edit' template" do
-        user = User.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        put :update, :id => user.id.to_s, :user => {}
-        response.should render_template("edit")
-      end
-    end
-  end
-
-  describe "DELETE destroy" do
-    it "destroys the requested user" do
-      expect {
-        delete :destroy, :id => @user.id.to_s
-      }.to change(User, :count).by(-1)
-    end
-
-    it "redirects to the users list" do
-      delete :destroy, :id => @user.id.to_s
-      response.should redirect_to(users_url)
-    end
-  end
+# 
+  # describe "DELETE destroy" do
+    # it "destroys the requested user" do
+      # expect {
+        # delete :destroy, :id => @user.id.to_s
+      # }.to change(User, :count).by(-1)
+    # end
+# 
+    # it "redirects to the users list" do
+      # delete :destroy, :id => @user.id.to_s
+      # response.should redirect_to(users_url)
+    # end
+  # end
 
 end

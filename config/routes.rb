@@ -5,7 +5,7 @@ MSampleApp::Application.routes.draw do
   match 'help' => 'pages#help'
   
   devise_for :users
-  resources :users, :except => :create # Routes for the users controller
+  resources :users, :except => [:new, :create] # Routes for the users controller
   
   root :to => "pages#home" # Setting up the root route
   

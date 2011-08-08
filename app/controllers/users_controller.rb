@@ -5,7 +5,8 @@ class UsersController < ApplicationController
   # GET /users.xml
   def index
     @title = "User List"
-    @users = User.all
+    # @users = User.all
+    @users = User.all.page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -25,38 +26,10 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/new
-  # GET /users/new.xml
-  def new
-    @title = "New User"
-    @user = User.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @user }
-    end
-  end
-
   # GET /users/1/edit
   def edit
     @user = User.find(params[:id])
     @title = "Edit #{@user.name}"
-  end
-
-  # POST /users
-  # POST /users.xml
-  def create
-    @user = User.new(params[:user])
-
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to(@user, :notice => 'User was successfully created.') }
-        format.xml  { render :xml => @user, :status => :created, :location => @user }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
-      end
-    end
   end
 
   # PUT /users/1

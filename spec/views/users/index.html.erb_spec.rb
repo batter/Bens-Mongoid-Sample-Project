@@ -1,15 +1,19 @@
 require 'spec_helper'
 
 describe "users/index.html.erb" do
-  before(:each) do
+  include Devise::TestHelpers
+  
+  before(:each) do    
     assign(:users, [
       stub_model(User,
         :name => "Ben",
-        :email => "ben@testbridge.com"
+        :email => "ben@testbridge.com",
+        :admin => false
       ),
       stub_model(User,
         :name => "Ben",
-        :email => "ben@testbridge.com"
+        :email => "ben@testbridge.com",
+        :admin => false
       )
     ])
   end
