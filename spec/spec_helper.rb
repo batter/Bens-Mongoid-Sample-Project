@@ -32,4 +32,12 @@ RSpec.configure do |config|
   config.before :each do
     Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
   end
+  
+  # Useful for when we need to sign a user in for an integration test
+  def integration_sign_in(user)
+    visit new_user_session_path
+    fill_in :user_email,    :with => user.email
+    fill_in :user_password, :with => user.password
+    click_button
+  end
 end

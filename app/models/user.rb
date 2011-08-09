@@ -19,5 +19,10 @@ class User
   validates_uniqueness_of :email, :case_sensitive => false
   
   paginates_per 30
+  
+  def toggle_admin!
+    self.admin = !admin
+    self.save!
+  end
 
 end

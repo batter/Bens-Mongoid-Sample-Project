@@ -1,12 +1,12 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!, :except => [:show]
+  before_filter :admin_user, :only => [:destroy, :edit, :update]
   
   # GET /users
   # GET /users.xml
   def index
     @title = "User List"
-    # @users = User.all
-    @users = User.all.page(params[:page])
+    @users = User.order_by([:created_at, :asc]).page(params[:page]) # Order by created at date
 
     respond_to do |format|
       format.html # index.html.erb
@@ -58,5 +58,11 @@ class UsersController < ApplicationController
       format.html { redirect_to(users_url) }
       format.xml  { head :ok }
     end
+  end
+  
+  private
+  # Method to ensure that a user is an admin
+  def admin_user
+    redirect_to(root_path) unless current_user.admin?
   end
 end

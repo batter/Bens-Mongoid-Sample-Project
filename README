@@ -1,6 +1,8 @@
 == Notes by the author
 This is a small sample app created by me in order to get the hang of using Rails3 in conjunction with MongoDB using the mongoid gem.
 
+In order to start using the application, edit the seed file at /db/seeds.rb and put in configuration values for the admin user, then run 'rake db:seed'.
+
 == Welcome to Rails
 
 Rails is a web-application framework that includes everything needed to create
