@@ -49,6 +49,7 @@ describe UsersController do
         get :index
         @users[0..2].each do |user|
           response.should have_selector("td", :content => user.name)
+          response.should have_selector("td", :content => user.email)
         end
       end
       
@@ -66,21 +67,32 @@ describe UsersController do
     
     describe "as an admin user" do
       before(:each) do
-        sign_in Factory(:user, :email => "admin@example.com", :admin => true)
+        sign_in admin = Factory(:user, :email => "admin@example.com", :admin => true)
         
         @users = [Factory(:user)]
-        10.times do
+        9.times do
           @users << Factory(:user, :email => Factory.next(:email))
         end
+        @users << admin
       end
       
-      it "should have links to edit a user" do
+      it "should have links to edit & delete a user" do
         get :index
         @users[0..2].each do |user|
           response.should have_selector("td", :content => user.name)
           response.should have_selector("td a", :href => edit_user_path(user),
                                                   :content => "Edit")
           response.should have_selector("td a", :href => "/users/#{user.id}",
+                                                  :content => "Delete")
+        end
+      end
+      
+      it "should not have links to delete admin users" do
+        get :index
+        @users.last do |user|
+          response.should have_selector("td a", :href => edit_user_path(user),
+                                                  :content => "Edit")
+          response.should_not have_selector("td a", :href => "/users/#{user.id}",
                                                   :content => "Delete")
         end
       end

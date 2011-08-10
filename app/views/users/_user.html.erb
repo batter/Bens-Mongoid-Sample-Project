@@ -3,6 +3,8 @@
   <td><%= user.email %></td>
   <% if current_user.admin? %>
 	<td><%= link_to 'Edit', edit_user_path(user) %></td>
-	<td><%= link_to 'Delete', user, :confirm => 'Are you sure?', :method => :delete %></td>
+	<td><% unless user.admin? %>
+		<%= link_to 'Delete', user, :confirm => 'Are you sure?', :method => :delete %>
+	<% end %></td>
   <% end %>
 </tr>

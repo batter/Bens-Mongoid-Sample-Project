@@ -51,18 +51,16 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.xml
   def destroy
-    @user = User.find(params[:id])
-    @user.destroy
+    User.find(params[:id]).destroy
 
     respond_to do |format|
-      format.html { redirect_to(users_url) }
+      format.html { redirect_to(users_path, :notice => "User deleted.") }
       format.xml  { head :ok }
     end
   end
   
   private
-  # Method to ensure that a user is an admin
-  def admin_user
+  def admin_user # Method to ensure that a user is an admin
     redirect_to(root_path) unless current_user.admin?
   end
 end
