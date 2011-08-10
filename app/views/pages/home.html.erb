@@ -1,5 +1,18 @@
-<h1>Welcome to Ben's Sample App</h1>
-<p>Welcome to the home page for Ben's Sample app.  This page will be improved as development progresses.</p>
-<% unless user_signed_in? %>
+<% if user_signed_in? %>
+  <table class="front" summary="For signed-in users">
+    <tr>
+      <td class="main">
+        <h1 class="micropost">What's up?</h1>
+        <%= render 'shared/micropost_form' %>
+        <%= render 'shared/feed' %>
+      </td>
+      <td class="sidebar round">
+        <%= render 'shared/user_info' %>
+      </td>
+    </tr>
+  </table>
+<% else %>
+  <h1>Welcome to Ben's Sample App</h1>
+  <p>Welcome to the home page for Ben's Sample app.  This page will be improved as development progresses.</p>
   <%= link_to "Sign up now!", new_user_registration_path, :class => "signup_button round" %>
 <% end %>

@@ -18,6 +18,10 @@ class User
   
   paginates_per 30
   
+  def feed
+    Micropost.where(:user_id => id)
+  end
+  
   def toggle_admin!
     self.admin = !admin
     self.save!

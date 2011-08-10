@@ -65,8 +65,7 @@ describe "LayoutLinks" do
   
   describe "when signed in, the header" do
     before(:each) do
-      @user = Factory(:user)
-      integration_sign_in @user
+      integration_sign_in Factory(:user)
     end
     
      it "should have a link to 'Settings' (profile)" do

@@ -105,7 +105,12 @@ describe UsersController do
       @user = Factory(:user)
     end
     
-    it "assigns the requested user as @user" do
+    it "should be successful" do
+      get :show, :id => @user.to_param
+      response.should be_success
+    end
+
+    it "should find the right user" do
       get :show, :id => @user.to_param
       assigns(:user).should eq(@user)
     end
@@ -114,6 +119,11 @@ describe UsersController do
       get :show, :id => @user.to_param
       response.should have_selector("title",
                         :content => @base_title + " | #{@user.name}")
+    end
+    
+    it "should include the user's name" do
+      get :show, :id => @user.to_param
+      response.should have_selector("h2", :content => @user.name)
     end
     
     it "should show the user's microposts" do
