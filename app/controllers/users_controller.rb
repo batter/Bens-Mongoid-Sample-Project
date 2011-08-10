@@ -18,6 +18,7 @@ class UsersController < ApplicationController
   # GET /users/1.xml
   def show
     @user = User.find(params[:id])
+    @microposts = @user.microposts.page(params[:page])
     @title = @user.name
 
     respond_to do |format|

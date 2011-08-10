@@ -11,11 +11,9 @@ class User
   
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me
   
-  has_many :microposts
+  has_many :microposts, :dependent => :destroy # destroy associated microposts before_destroy
   
-  # Validations
-  validates :name,  :presence => true,
-                    :length   => { :maximum => 50 }
+  validates :name, :presence => true, :length   => { :maximum => 50 }
   validates_uniqueness_of :email, :case_sensitive => false
   
   paginates_per 30
@@ -24,5 +22,4 @@ class User
     self.admin = !admin
     self.save!
   end
-
 end

@@ -1,11 +1,12 @@
 MSampleApp::Application.routes.draw do
-
-  # Setup the routes for the pages controller
-  match 'about' => 'pages#about'
-  match 'help' => 'pages#help'
   
   devise_for :users
   resources :users, :except => [:new, :create] # Routes for the users controller
+  resources :microposts, :only => [:create, :destroy]
+  
+  # Setup the routes for the pages controller
+  match 'about' => 'pages#about'
+  match 'help' => 'pages#help'
   
   root :to => "pages#home" # Setting up the root route
   
