@@ -14,3 +14,7 @@ Factory.define :micropost do |micropost|
   micropost.content "Foo bar"
   micropost.association :user
 end
+
+Factory.sequence :pcontent do |n|
+  "lorem ipsum #{n} dolor #{n} sit amet"
+end

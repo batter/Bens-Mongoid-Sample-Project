@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   # GET /users/1.xml
   def show
     @user = User.find(params[:id])
-    @microposts = @user.microposts.page(params[:page])
+    @feed_items = @user.feed.page(params[:page])
     @title = @user.name
 
     respond_to do |format|
@@ -64,7 +64,8 @@ class UsersController < ApplicationController
   end
   
   private
-  def admin_user # Method to ensure that a user is an admin
-    redirect_to(root_path) unless current_user.admin?
-  end
+  
+    def admin_user # Method to ensure that a user is an admin
+      redirect_to(root_path) unless current_user.admin?
+    end
 end

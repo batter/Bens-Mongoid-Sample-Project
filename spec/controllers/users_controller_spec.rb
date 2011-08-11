@@ -133,6 +133,34 @@ describe UsersController do
       response.should have_selector("span.content", :content => mp1.content)
       response.should have_selector("span.content", :content => mp2.content)
     end
+    
+    describe "sidebar" do
+      
+      before(:each) do
+        @attr1 = { :content => "Lorem ipsum dolor sit amet"}
+        @attr2 = { :content => "I hope that this test works!"}
+        get :show, :id => @user.to_param
+      end
+      
+      it "should have the user's name" do
+        response.should have_selector('span', :content => "Name #{@user.name}")
+      end
+      
+      it "should have the user's URL" do
+        response.should have_selector('span', :content => "URL #{user_path(@user)}")
+        response.should have_selector('a', :href => user_path(@user), :content => user_path(@user))
+      end
+      
+      it "should show the correct micropost count" do 
+        response.should have_selector('span', :content => "Microposts 0") 
+        Factory(:micropost, :user => @user, :content => "Foo bar")
+        get :show, :id => @user.to_param
+        response.should have_selector('span', :content => "Microposts 1")
+        Factory(:micropost, :user => @user, :content => "Lorem ipsum")
+        get :show, :id => @user.to_param
+        response.should have_selector('span', :content => "Microposts 2") 
+      end
+    end
   end
   
   describe "DELETE 'destroy'" do

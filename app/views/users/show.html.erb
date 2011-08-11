@@ -2,17 +2,12 @@
   <tr>
     <td class="main">
       <h2><%= @user.name %></h2>
-      <% unless @user.microposts.empty? %>
-        <table class="microposts" summary="User microposts">
-          <%= render @microposts %>
-        </table>
-        <%= paginate @microposts %>
-      <% end %>
+      <%= render 'shared/feed' %>
     </td>
     <td class="sidebar round">
-      <strong>Name</strong> <%= @user.name %><br />
-      <strong>URL</strong> <%= link_to user_path(@user), @user %><br />
-      <strong>Microposts</strong> <%= @user.microposts.count %>
+      <span><strong>Name</strong> <%= @user.name %></span><br/>
+      <span><strong>URL</strong> <%= link_to user_path(@user), @user %></span><br/>
+      <span><strong>Microposts</strong> <%= @user.microposts.count %></span>
     </td>
   </tr>
 </table>

@@ -13,7 +13,7 @@ class User
   
   has_many :microposts, :dependent => :destroy # destroy associated microposts before_destroy
   
-  validates :name, :presence => true, :length   => { :maximum => 50 }
+  validates :name, :presence => true, :length   => { :maximum => 60 }
   validates_uniqueness_of :email, :case_sensitive => false
   
   paginates_per 30

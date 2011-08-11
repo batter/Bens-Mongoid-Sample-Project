@@ -1,7 +1,9 @@
 MSampleApp::Application.routes.draw do
   
   devise_for :users
-  resources :users, :except => [:new, :create] # Routes for the users controller
+  resources :users, :except => [:new, :create] do # Routes for the users controller
+    resources :microposts, :only => [:index, :show]
+  end
   resources :microposts, :only => [:create, :destroy]
   
   # Setup the routes for the pages controller
