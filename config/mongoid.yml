@@ -6,9 +6,12 @@ test:
   host: localhost
   database: m_sample_app_test
 
-# set these environment variables on your prod server
+# For using MongoHQ, we only need this variable in our heroku environment
 production:
   uri: <%= ENV['MONGOHQ_URL'] %>
+
+# set these environment variables on your prod server
+# production:
   # host: <%= ENV['MONGOID_HOST'] %>
   # port: <%= ENV['MONGOID_PORT'] %>
   # username: <%= ENV['MONGOID_USERNAME'] %>
