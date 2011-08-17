@@ -190,9 +190,9 @@ describe UsersController do
       end
 
       it "should destroy the user" do
-        lambda do
+        expect {
           delete :destroy, :id => @user.to_param
-        end.should change(User, :count).by(-1)
+        }.to change(User, :count).by(-1)
       end
 
       it "should redirect to the users page" do

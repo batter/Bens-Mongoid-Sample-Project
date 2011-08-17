@@ -13,7 +13,9 @@ describe "Following" do
       expect {
         visit user_path(@other_user)
         response.should render_template('users/show')
+        response.should have_selector('span', :content => '0 followers')
         click_button "Follow"
+        response.should have_selector('span', :content => '1 follower')
       }.to change(Relationship, :count).by(1)
     end
     
@@ -22,7 +24,9 @@ describe "Following" do
       expect {
         visit user_path(@other_user)
         response.should render_template('users/show')
+        response.should have_selector('span', :content => '1 follower')
         click_button "Unfollow"
+        response.should have_selector('span', :content => '0 followers')
       }.to change(Relationship, :count).by(-1)
     end
   end

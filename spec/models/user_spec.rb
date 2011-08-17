@@ -80,9 +80,9 @@ describe User do
       @user.destroy
       [@mp1, @mp2].each do |micropost|
         #Micropost.find(micropost.id).should be_nil
-        lambda do 
+        expect {
           Micropost.find(micropost.to_param)
-        end.should raise_error(Mongoid::Errors::DocumentNotFound)
+        }.to raise_error(Mongoid::Errors::DocumentNotFound)
       end
     end
     
@@ -171,18 +171,18 @@ describe User do
     it "should destroy following relationships when destroyed" do
       relationship = @user.follow!(@followed)
       @user.destroy
-      lambda do 
+      expect {
         Relationship.find(relationship.to_param)
-      end.should raise_error(Mongoid::Errors::DocumentNotFound)
+      }.to raise_error(Mongoid::Errors::DocumentNotFound)
     end
     
     it "should destroy followed relationships when destroyed" do
       relationship = @user.follow!(@followed)
       @followed.destroy
       @user.should_not be_following(@followed)
-      lambda do 
+      expect {
         Relationship.find(relationship.to_param)
-      end.should raise_error(Mongoid::Errors::DocumentNotFound)
+      }.to raise_error(Mongoid::Errors::DocumentNotFound)
     end
   end
 end

@@ -22,17 +22,17 @@ describe RelationshipsController do
     end
 
     it "should create a relationship" do
-      lambda do
+      expect {
         post :create, :relationship => { :followed_id => @followed.to_param }
         response.should be_redirect
-      end.should change(Relationship, :count).by(1)
+      }.to change(Relationship, :count).by(1)
     end
     
     it "should create a relationship using Ajax" do
-      lambda do
+      expect {
         xhr :post, :create, :relationship => { :followed_id => @followed.to_param }
         response.should be_success
-      end.should change(Relationship, :count).by(1)
+      }.to change(Relationship, :count).by(1)
     end
   end
 
@@ -46,17 +46,17 @@ describe RelationshipsController do
     end
 
     it "should destroy a relationship" do
-      lambda do
+      expect {
         delete :destroy, :id => @relationship.to_param
         response.should be_redirect
-      end.should change(Relationship, :count).by(-1)
+      }.to change(Relationship, :count).by(-1)
     end
     
     it "should destroy a relationship using Ajax" do
-      lambda do
+      expect {
         xhr :delete, :destroy, :id => @relationship.to_param
         response.should be_success
-      end.should change(Relationship, :count).by(-1)
+      }.to change(Relationship, :count).by(-1)
     end
   end
 end
