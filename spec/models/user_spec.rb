@@ -81,7 +81,7 @@ describe User do
       [@mp1, @mp2].each do |micropost|
         #Micropost.find(micropost.id).should be_nil
         lambda do 
-          Micropost.find(micropost.id)
+          Micropost.find(micropost.to_param)
         end.should raise_error(Mongoid::Errors::DocumentNotFound)
       end
     end
@@ -102,6 +102,87 @@ describe User do
                       :user => Factory(:user, :email => Factory.next(:email)))
         @user.feed.include?(mp3).should be_false
       end
+      
+      it "should include the microposts of followed users" do
+        followed = Factory(:user, :email => Factory.next(:email))
+        mp3 = Factory(:micropost, :user => followed)
+        @user.follow!(followed)
+        @user.feed.should include(mp3)
+      end
+    end
+  end
+  
+  describe "relationships" do
+    
+    before(:each) do
+      @user = User.create!(@attr)
+      @followed = Factory(:user)
+    end
+    
+    it "should have a following_relationships method" do
+      @user.should respond_to(:following_relations)
+    end
+    
+    it "should have a following method" do
+      @user.should respond_to(:following)
+    end
+    
+    it "should have a following? method" do
+      @user.should respond_to(:following?)
+    end
+
+    it "should have a follow! method" do
+      @user.should respond_to(:follow!)
+    end
+
+    it "should follow another user" do
+      @user.follow!(@followed)
+      @user.should be_following(@followed)
+    end
+
+    it "should include the followed user in the following array" do
+      @user.follow!(@followed)
+      @user.following.should include(@followed)
+    end
+    
+    it "should have an unfollow! method" do
+      @followed.should respond_to(:unfollow!)
+    end
+
+    it "should unfollow a user" do
+      @user.follow!(@followed)
+      @user.unfollow!(@followed)
+      @user.should_not be_following(@followed)
+    end
+    
+    it "should have a followers_relationships method" do
+      @user.should respond_to(:followers_relations)
+    end
+
+    it "should have a followers method" do
+      @user.should respond_to(:followers)
+    end
+
+    it "should include the follower in the followers array" do
+      @user.follow!(@followed)
+      @followed.followers.should include(@user)
+    end
+    
+    it "should destroy following relationships when destroyed" do
+      relationship = @user.follow!(@followed)
+      @user.destroy
+      lambda do 
+        Relationship.find(relationship.to_param)
+      end.should raise_error(Mongoid::Errors::DocumentNotFound)
+    end
+    
+    it "should destroy followed relationships when destroyed" do
+      relationship = @user.follow!(@followed)
+      @followed.destroy
+      @user.should_not be_following(@followed)
+      lambda do 
+        Relationship.find(relationship.to_param)
+      end.should raise_error(Mongoid::Errors::DocumentNotFound)
     end
   end
 end

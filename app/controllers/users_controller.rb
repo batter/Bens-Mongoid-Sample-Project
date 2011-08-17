@@ -26,6 +26,22 @@ class UsersController < ApplicationController
       format.xml  { render :xml => @user }
     end
   end
+  
+  # GET /users/1/following
+  def following
+    @title = "Following"
+    @user = User.find(params[:id])
+    @users = @user.following.page(params[:page])
+    render 'show_follow'
+  end
+  
+  # GET /users/1/followers
+  def followers
+    @title = "Followers"
+    @user = User.find(params[:id])
+    @users = @user.followers.page(params[:page])
+    render 'show_follow'
+  end
 
   # GET /users/1/edit
   def edit

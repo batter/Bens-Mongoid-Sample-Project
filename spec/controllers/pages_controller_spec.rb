@@ -83,6 +83,16 @@ describe PagesController do
           get :home
           response.should have_selector("a", :href => user_microposts_path(@user), :content => "2 microposts")
         end
+        
+        it "should have the right follower/following counts" do
+          other_user = Factory(:user, :email => Factory.next(:email))
+          other_user.follow!(@user)
+          get :home
+          response.should have_selector("a", :href => following_user_path(@user),
+                                             :content => "0 following")
+          response.should have_selector("a", :href => followers_user_path(@user),
+                                             :content => "1 follower")
+        end
       end
     end
   end

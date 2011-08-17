@@ -12,4 +12,9 @@ class Micropost
   validates :user_id, :presence => true
   
   default_scope :order => {:created_at, :desc}
+  
+  def self.from_users_followed_by(user)
+    any_in(:user_id => user.following_relations.map(&:followed_id) << user.id)
+    # any_in(:user_id => user.following.push(user).map(&:to_param)) #- Shorter syntax, but less efficient
+  end
 end

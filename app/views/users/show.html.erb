@@ -2,12 +2,14 @@
   <tr>
     <td class="main">
       <h2><%= @user.name %></h2>
+      <%= render 'follow_form' if user_signed_in? %>
       <%= render 'shared/feed' %>
     </td>
     <td class="sidebar round">
       <span><strong>Name</strong> <%= @user.name %></span><br/>
       <span><strong>URL</strong> <%= link_to user_path(@user), @user %></span><br/>
-      <span><strong>Microposts</strong> <%= @user.microposts.count %></span>
+      <span><strong>Microposts</strong> <%= link_to @user.microposts.count, user_microposts_path(@user) %></span>
+      <%= render 'shared/stats' %>
     </td>
   </tr>
 </table>
