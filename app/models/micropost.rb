@@ -11,7 +11,7 @@ class Micropost
   validates :content, :presence => true, :length => {:maximum => 140}
   validates :user_id, :presence => true
   
-  default_scope :order => {:created_at, :desc}
+  default_scope desc(:created_at)
   
   def self.from_users_followed_by(user)
     any_in(:user_id => user.following_relations.map(&:followed_id) << user.id)

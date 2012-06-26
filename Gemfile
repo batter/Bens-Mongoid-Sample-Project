@@ -7,7 +7,7 @@ gem 'devise', '1.4.2' # use devise for authentication
 # use MongoDB with the mongoid gem
 gem 'mongoid', '~> 2.2.0'
 gem 'bson_ext', '~> 1.3'
-gem 'SystemTimer', '~> 1.2'
+gem 'SystemTimer', '~> 1.2', :platforms => :ruby_18
 
 group :development do
   gem 'rspec-rails', '2.6.1'
