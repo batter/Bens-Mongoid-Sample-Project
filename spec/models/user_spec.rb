@@ -81,7 +81,7 @@ describe User do
       [@mp1, @mp2].each do |micropost|
         #Micropost.find(micropost.id).should be_nil
         expect {
-          Micropost.find(micropost.to_param)
+          Micropost.find(micropost.id)
         }.to raise_error(Mongoid::Errors::DocumentNotFound)
       end
     end
@@ -152,6 +152,7 @@ describe User do
     it "should unfollow a user" do
       @user.follow!(@followed)
       @user.unfollow!(@followed)
+      @user.reload
       @user.should_not be_following(@followed)
     end
     
@@ -172,7 +173,7 @@ describe User do
       relationship = @user.follow!(@followed)
       @user.destroy
       expect {
-        Relationship.find(relationship.to_param)
+        Relationship.find(relationship.id)
       }.to raise_error(Mongoid::Errors::DocumentNotFound)
     end
     
