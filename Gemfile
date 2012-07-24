@@ -18,7 +18,7 @@ end
 group :test do
   gem 'rspec-rails', '2.6.1'
   gem 'mongoid-rspec', '1.4.4'
-  gem 'webrat', '0.7.1'
+  gem 'webrat', '0.7.3'
   gem 'factory_girl_rails', '1.1.0'
   # add Autotest for easier running
   gem 'autotest', '4.4.6'
