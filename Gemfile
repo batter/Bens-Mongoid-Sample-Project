@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.9'
+gem 'rails', '3.0.15'
 gem 'kaminari', '0.12.4' # use kaminari for pagination
 gem 'devise', '1.4.2' # use devise for authentication
 
